@@ -10,11 +10,12 @@ export default class Newspace extends Component {
     console.log("constructor added");
     this.state={
     articles : this.articles,
+    page:1,
     }
   }
   async componentDidMount()
   {
-    let url="https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=f11243982f08423580e0141b0ab70b1c";
+    let url=`https://newsapi.org/v2/top-headlines?q=apple&from=2022-10-25&to=2022-10-25&sortBy=popularity&apiKey=f11243982f08423580e0141b0ab70b1c&pageSize=6&page=${this.page}`;
     let data=await fetch(url);
     let ParsedData=await data.json();
     this.setState({
@@ -22,6 +23,27 @@ export default class Newspace extends Component {
     })
   }
 
+   prevpage=async ()=>{
+    let url=`https://newsapi.org/v2/top-headlines?q=apple&from=2022-10-25&to=2022-10-25&sortBy=popularity&apiKey=f11243982f08423580e0141b0ab70b1c&pageSize=6&page=${this.state.page-1}`;
+    let data=await fetch(url);
+    let ParsedData=await data.json();
+    this.setState({
+      articles:ParsedData.articles,
+      page : this.state.page-1
+    })
+    console.log("previous")
+  }
+  nextpage=async ()=>{
+    let url=`https://newsapi.org/v2/top-headlines?q=apple&from=2022-10-25&to=2022-10-25&sortBy=popularity&apiKey=f11243982f08423580e0141b0ab70b1c&pageSize=6&page=${this.state.page+1}`;
+    let data=await fetch(url);
+    let ParsedData=await data.json();
+    this.setState({
+      articles:ParsedData.articles,
+      page : this.state.page+1
+    })
+    console.log("previous")
+  }
+  
   render() {
     return (
     <>
@@ -34,6 +56,11 @@ export default class Newspace extends Component {
         </div>
           )
         })}
+      </div>
+
+      <div className="buttons">
+      <button className="button-3" role="button" onClick={this.prevpage}>Prev</button>
+      <button className="button-3" role="button" onClick={this.nextpage}>Next</button>
       </div>
     </>
     )
